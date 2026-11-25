@@ -1,0 +1,16 @@
+public class FireWeapon extends WeaponDecorator{
+
+    public FireWeapon(WeaponBehavior wrapped) {
+        super(wrapped);
+    }
+
+    @Override
+    public int damage(){
+        return wrapped.damage() + 4;
+    }
+
+    @Override
+    public String description() {
+        return wrapped.description() + " +  fire";
+    }
+}
