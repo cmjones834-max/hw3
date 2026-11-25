@@ -1,0 +1,57 @@
+public class GameCharacter implements CombatSubject {
+
+    private final String name;
+    private WeaponBehavior weapon;
+    private final List<CombatObserver> observers = new ArrayList<>();
+
+    public GameCharacter(String name, WeaponBehavior weapon) {
+        this.name = Objects.requireNonNull(name, "name");
+        this.weapon = Objects.requireNonNull(weapon, "weapon");
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public WeaponBehavior getWeaponBehavior() {
+        return weapon;
+    }
+
+    public void setWeaponBehavior(WeaponBehavior weapon) {
+        Objects.requireNonNull(weapon, "weapon");
+        this.weapon = weapon;
+    }
+
+    
+    public AttackEvent attack() {
+        int damage = weapon.damage();
+        String description = weapon.description();
+
+        AttackEvent event =
+                new AttackEvent(name, description, damage);
+
+        for (CombatObserver observer : observers) {
+            observer.update(event);
+        }
+
+        return event;
+    }
+
+
+    @Override
+    public void registerObserver(CombatObserver observer) {
+        Objects.requireNonNull(observer, "observer");
+
+        if (!observers.contains(observer)) {
+            observers.add(observer);
+        }
+    }
+
+   
+    @Override
+    public void removeObserver(CombatObserver observer) {
+        Objects.requireNonNull(observer, "observer");
+
+        observers.remove(observer);
+    }
+}
